@@ -1,5 +1,28 @@
+{% extends 'base.html' %}
 
-    <h1>Welcome to your Dashboard, {{ user.username }}</h1>
-    <p>Your role: None (you are not assigned to any group)</p>
-    <!-- Default content here -->
+{% block title %}Dashboard{% endblock %}
 
+{% block content %}
+    <h1 class="text-3xl font-bold">Welcome to your Dashboard, {{ user.username }}</h1>
+
+    <!-- Display role if assigned, otherwise show 'None' -->
+    <p class="text-xl mt-4">
+        Your role: 
+        {% if user.role %}
+            {{ user.get_role_display }}
+        {% else %}
+            None (you are not assigned to any group)
+        {% endif %}
+    </p>
+
+    <!-- Custom content depending on the user's role -->
+    {% if user.role == 'student' %}
+        <p class="mt-6">Welcome, student! Here are your courses:</p>
+        <!-- Insert student-specific content here -->
+    {% elif user.role == 'lecturer' %}
+        <p class="mt-6">Welcome, lecturer! Here are the courses you teach:</p>
+        <!-- Insert lecturer-specific content here -->
+    {% else %}
+        <p class="mt-6">You are not assigned a role yet. Please contact the administrator.</p>
+    {% endif %}
+{% endblock %}

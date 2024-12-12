@@ -6,14 +6,18 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import Group
+
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save(commit=False)
+            user.role = None  # Set role to None explicitly
+            user.save()
+            return redirect('login')  # Redirect to login or any other page
     else:
         form = UserRegistrationForm()
+
     return render(request, 'register.html', {'form': form})
 
 def user_login(request):
